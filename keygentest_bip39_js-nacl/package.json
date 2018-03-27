@@ -1,0 +1,17 @@
+{
+  "name": "keygentest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bip39": "^2.5.0",
+    "elliptic": "^6.4.0",
+    "js-nacl": "^1.2.2",
+    "nodemon": "^1.17.2"
+  }
+}

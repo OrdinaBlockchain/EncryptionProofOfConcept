@@ -1,24 +1,24 @@
 var bip39 = require('bip39');
+var nacl_factory = require('js-nacl');
 // var EdDSA = require('elliptic').eddsa;
 // var ec = new EdDSA('ed25519');
 
 //Make key from random mnemonic
 var mnemonic = bip39.generateMnemonic(); 
 
-console.log(mnemonic);
+console.log('PassPhrase         '+ mnemonic);
+
 //var key = ec.keyFromSecret(bip39.mnemonicToSeed(mnemonic));
 
 var msg = 'cryptografie is pijnlijk';
 
-
-var nacl_factory = require("js-nacl");
 nacl_factory.instantiate(function (nacl) {
     //Generate private(signSk) and public(signPk) key
     const { signSk, signPk } = nacl.crypto_sign_seed_keypair(bip39.mnemonicToEntropy(mnemonic));
     
     //From byte array to hexcode to print without taking 4000 lines
-    console.log(nacl.to_hex(signSk));
-    console.log(nacl.to_hex(signPk));
+    console.log('Private key:       '+nacl.to_hex(signSk));
+    console.log('Public key:        '+ nacl.to_hex(signPk));
 
     //Make adress 
     //Hash public key, take first 8 bytes
@@ -27,7 +27,7 @@ nacl_factory.instantiate(function (nacl) {
     //Start with SNOW followed by the hex of the bytes
     var address = 'SNOW' + nacl.to_hex(hash);
 
-    console.log(address);
+    console.log('Adress:            ' + address);
 
     //Convert message to bytestring
     const msgBytes = Buffer.from(msg, 'utf8');
@@ -35,7 +35,7 @@ nacl_factory.instantiate(function (nacl) {
     //Sign message and package up into packet
     var packetBin = nacl.crypto_sign(msgBytes, signSk);
 
-    console.log(nacl.to_hex(packetBin));
+    console.log('Packet:            '+nacl.to_hex(packetBin));
 
     //Decode message from packet with public key
     var hexStrin = nacl.to_hex(nacl.crypto_sign_open(packetBin, signPk)).toString();
@@ -45,6 +45,6 @@ nacl_factory.instantiate(function (nacl) {
     for (var i = 0; i < hexStrin.length; i += 2)
         str += String.fromCharCode(parseInt(hexStrin.substr(i, 2), 16));
     
-    console.log(str);
+    console.log('Text:              '+str);
 });
 

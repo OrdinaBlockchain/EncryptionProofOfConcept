@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.6.0",
     "bip39": "^2.5.0",
     "elliptic": "^6.4.0",
     "js-nacl": "^1.2.2",

@@ -1,6 +1,6 @@
 let bip39 = require('bip39');
 let nacl_factory = require('js-nacl');
-let verbose = false;
+let verbose = true;
 
 function Sign(message, privKey) {
     var signatureBin;
@@ -11,9 +11,9 @@ function Sign(message, privKey) {
         const msgBytes = MessageToBytes(message);
 
         //Sign message and package up into packet
-        signatureBin = nacl.crypto_sign(msgBytes, signSk);
+        signatureBin = nacl.crypto_sign(msgBytes, signPrivKey);
+        Debug('Signature:           ' + nacl.to_hex(signatureBin));
     });
-    Debug('Signature:           ' + nacl.to_hex(signatureBin));
 
     return signatureBin;
 }
@@ -52,7 +52,7 @@ function Verify(signatureBin, pubKey) {
         for (var i = 0; i < hexString.length; i += 2)
             message += String.fromCharCode(parseInt(hexString.substr(i, 2), 16));
     });
-    Debug('Text:              ' + message);
+    //Debug('Text:              ' + message);
 
     return message;
 }
